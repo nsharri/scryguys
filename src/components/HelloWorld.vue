@@ -3,7 +3,7 @@
     <h1>{{ msg }}</h1>
     <p>
       trying something new
-      <ul id="mylist"></ul>
+      <ul id="mylist1"></ul>
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <h3>Installed CLI Plugins</h3>
@@ -38,19 +38,20 @@ export default {
     msg: String
   }
 }
-scryfall.search("o:vigilance t:equipment").then(function (list) {
+scryfall.search("(in:dmu or in:dmc or in:leg) and c=r", {order: "usd"}).then(function (list) {
   list.has_more; // whether or not there is an additional page of results, `true` or `false`
   list.total_cards; // the total number of cards returned from search
 
   var names = list.map(function (card) {
     // the list object can use any Array method
-    return card.name;
+    return [card.getImage("normal"), card.name, card.getPrice("usd")];
   });
-  let list1 =document.getElementById("mylist");
+
+  let list1 =document.getElementById("mylist1");
   for (let i = 0; i < names.length; i++) {
-    let li = document.createElement('li');
-    li.innerText = names[i]
-    list1.appendChild(li);
+    let li1 = document.createElement('li');
+    li1.innerText = names[i]
+    list1.appendChild(li1);
     }
   
 });
