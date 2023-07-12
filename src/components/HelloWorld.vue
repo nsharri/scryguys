@@ -3,7 +3,6 @@
     <h1>{{ msg }}</h1>
     <p>
       trying something new
-      <ul id="mylist1"></ul>
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <h3>Installed CLI Plugins</h3>
@@ -31,6 +30,7 @@
 </template>
 
 <script>
+
 var scryfall = require("scryfall-client");
 export default {
   name: 'HelloWorld',
@@ -44,15 +44,39 @@ scryfall.search("(in:dmu or in:dmc or in:leg) and c=r", {order: "usd"}).then(fun
 
   var names = list.map(function (card) {
     // the list object can use any Array method
-    return [card.getImage("normal"), card.name, card.getPrice("usd")];
+    return [card.getImage("small"), card.name, card.getPrice("usd")];
   });
 
-  let list1 =document.getElementById("mylist1");
+  /*let list1 =document.getElementById("mylist1");
   for (let i = 0; i < names.length; i++) {
     let li1 = document.createElement('li');
     li1.innerText = names[i]
     list1.appendChild(li1);
-    }
+    }*/
+
+      var headers = ["Picture", "Name", "Price"];
+      var table = document.createElement("TABLE");  //makes a table element for the page
+      
+          
+      for(let i = 0; i < names.length; i++) {
+          var src = names[i][0],
+                img = document.createElement('img'),
+                row = table.insertRow(i);
+                img.src = src;
+            
+          row.insertCell(0).innerHTML = "<img src=\""+img.src+" width=\"600px\" height=\"200px\">";
+          row.insertCell(1).innerHTML = names[i][1];
+          row.insertCell(2).innerHTML = "$"+names[i][2];
+      }
+
+      var header = table.createTHead();
+      var headerRow = header.insertRow(0);
+      for(var i = 0; i < headers.length; i++) {
+          headerRow.insertCell(i).innerHTML = headers[i];
+      }
+
+      document.body.append(table);
+      
   
 });
 
