@@ -2,8 +2,8 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
+      trying something new
+      <ul id="mylist"></ul>
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <h3>Installed CLI Plugins</h3>
@@ -31,12 +31,30 @@
 </template>
 
 <script>
+var scryfall = require("scryfall-client");
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   }
 }
+scryfall.search("o:vigilance t:equipment").then(function (list) {
+  list.has_more; // whether or not there is an additional page of results, `true` or `false`
+  list.total_cards; // the total number of cards returned from search
+
+  var names = list.map(function (card) {
+    // the list object can use any Array method
+    return card.name;
+  });
+  let list1 =document.getElementById("mylist");
+  for (let i = 0; i < names.length; i++) {
+    let li = document.createElement('li');
+    li.innerText = names[i]
+    list1.appendChild(li);
+    }
+  
+});
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
