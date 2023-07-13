@@ -1,10 +1,21 @@
+
+
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
+    <p>What Set?</p>
     <p>
-      trying something new
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
+      <input v-model="message" placeholder="edit me" />
     </p>
+      What Color: {{ picked }}
+      <input type="radio" id="color" value="White" v-model="picked" />
+      <label for="white">White</label>
+      <input type="radio" id="color" value="Blue" v-model="picked" />
+      <label for="blue">Blue</label>
+      <input type="radio" id="color" value="Black" v-model="picked" />
+      <label for="black">Black</label>
+      <input type="radio" id="color" value="Red" v-model="picked" />
+      <label for="red">Red</label>
+      <input type="radio" id="color" value="Green" v-model="picked" />
+      <label for="green">Green</label>
     <h3>Installed CLI Plugins</h3>
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
@@ -26,33 +37,24 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
-  </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue'
 
-var scryfall = require("scryfall-client");
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
-scryfall.search("(in:dmu or in:dmc or in:leg) and c=r", {order: "usd"}).then(function (list) {
-  list.has_more; // whether or not there is an additional page of results, `true` or `false`
-  list.total_cards; // the total number of cards returned from search
+const picked = ref('White')
 
-  var names = list.map(function (card) {
-    // the list object can use any Array method
-    return [card.getImage("small"), card.name, card.getPrice("usd")];
-  });
+function scry_call() {
+      var scryfall = require("scryfall-client");
+      scryfall.search("(in:dmu or in:dmc or in:leg) and c="+picked.value, {order: "usd"}).then(function (list) {
+        list.has_more; // whether or not there is an additional page of results, `true` or `false`
+        list.total_cards; // the total number of cards returned from search
 
-  /*let list1 =document.getElementById("mylist1");
-  for (let i = 0; i < names.length; i++) {
-    let li1 = document.createElement('li');
-    li1.innerText = names[i]
-    list1.appendChild(li1);
-    }*/
+
+      var names = list.map(function (card) {
+        // the list object can use any Array method
+        return [card.getImage("small"), card.name, card.getPrice("usd")];
+      });
 
       var headers = ["Picture", "Name", "Price"];
       var table = document.createElement("TABLE");  //makes a table element for the page
@@ -78,9 +80,24 @@ scryfall.search("(in:dmu or in:dmc or in:leg) and c=r", {order: "usd"}).then(fun
       document.body.append(table);
       
   
-});
+      });
+    }
+    scry_call();
+//var color = document.getElementsByName("color");
+//window.alert(color)
+//color.addEventListener("click", window.alert(color));
+
+/*color.addEventListener("click", window.alert(color));function(event){ 
+    if(event.target.type == 'radio'){
+       //scry_call();
+       
+      }
+
+})
+;*/
 
 </script>
+
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
